@@ -7,7 +7,7 @@
 #include <cstdlib> 
 #include <stdio.h>
 #include <mpi.h> 
-# define N_DIM 4  
+# define N_DIM 400  
 /*compiler: mpicxx -o matrix matrix.cpp
   execution:   mpirun -np 4 ./matrix
 */
@@ -21,11 +21,12 @@ void read_file(string s, int n_row, int n_col, double  *matrix){
 		exit (0);
 	}//leer mis datos de la matrix que la tengo en un txt
 	for (int i = 0; i < n_row; i++){//filas
-		getline(fin, line);
-	    std::stringstream stream(line);
+		//getline(fin, line);
+	    //std::stringstream stream(line);
 		for (int j = 0; j < n_col; j++){//columnas
-			stream >> data;      
-			*(matrix+(i*n_col)+j) = data;
+			//stream >> data;      
+			//*(matrix+(i*n_col)+j) = data;
+            *(matrix+(i*n_col)+j)=rand()%20;
 		}  
 	}  
 }  
@@ -47,7 +48,7 @@ void Multiply(int dim, double *matrix_data, double *vector_data,double *result){
     // Gather para recolectar la respuesta de los demás procesos
     MPI_Gather(ans, (dim)/size, MPI_DOUBLE, result, (dim)/size, MPI_DOUBLE, 0, MPI_COMM_WORLD); 
     timer = MPI_Wtime()-timer;
-    cout << "Timer = "<<timer<<endl;
+    cout << "Timer = "<<timer*1000<<endl;
 }
 int main( int argc, char *argv[]){
     int rank, size;                    //MPI RANK,SIZE
@@ -71,7 +72,7 @@ int main( int argc, char *argv[]){
     }
     Multiply(N_DIM, (double *)matrix_data, vector_data,result);
     /* Impresión de la matrix*/
-    if (rank==0){
+    /*if (rank==0){
         cout<<"Matrix  :\n";;
         for (int i=0;i<N_DIM;i++){
             for (int j=0;j<N_DIM;j++)
@@ -86,7 +87,7 @@ int main( int argc, char *argv[]){
         for (int i=0;i<N_DIM;i++)
             cout<<result[i]<<" ";
         cout<<endl;
-    }
+    }*/
     MPI_Finalize();
     return(0);
 }
