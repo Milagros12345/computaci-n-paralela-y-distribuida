@@ -45,8 +45,8 @@ void Multiply(int dim, double *matrix_data, double *vector_data,double *result){
     for (int i = 0;i<(dim/size);i++)
         for (int j = 0;j<dim;j++)
             ans[i]+=vector_data[j]*matrix[i][j];
-    // Gather para recolectar la respuesta de los demás procesos
-    MPI_Gather(ans, (dim)/size, MPI_DOUBLE, result, (dim)/size, MPI_DOUBLE, 0, MPI_COMM_WORLD); 
+    // allgather para que cada procesador tenga la respuesta 
+    MPI_Allgather(ans, (dim)/size, MPI_DOUBLE, result, (dim)/size, MPI_DOUBLE, MPI_COMM_WORLD); 
     timer = MPI_Wtime()-timer;
     cout << "Timer = "<<timer*1000<<endl;
 }
@@ -91,6 +91,4 @@ int main( int argc, char *argv[]){
     MPI_Finalize();
     return(0);
 }
-
-
 
