@@ -6,6 +6,10 @@
 #include <chrono>
 #include <iomanip>
 #include <time.h>
+/*
+compiler: g++ -pthread -o list listsimple.cpp
+execute: ./list
+*/
 using namespace std; 
 struct list_node_s {
     int data;
